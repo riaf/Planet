@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>planet</title>
+</head>
+<body>
+    <h1>planet</h1>
+    <ul>
+        <li><a href="{$t.url()}">home</a></li>
+        <li><a href="{$t.url('add_subscription')}">add</a></li>
+    </ul>
+    <div id="main">
+    <rt:block name="main">
+        <rt:loop param="entries" var="entry">
+            <div class="entry">
+                <h3>{$entry.title()}</h3>
+                <div class="description">
+                    {$entry.description()}
+                </div>
+                <p class="permalink"><a href="{$entry.link()}">{$entry.link()}</a></p>
+            </div>
+        </rt:loop>
+    </rt:block>
+    </div>
+</body>
+</html>
