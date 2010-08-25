@@ -6,7 +6,7 @@ module('model.PlanetSubscription');
 class Planet extends Flow
 {
     protected function __init__() {
-        $this->vars('sitename', module_const('pagename', 'Planet'));
+        $this->vars('sitename', module_const('sitename', 'Planet'));
         $this->vars('subscriptions', C(PlanetSubscription)->find_all());
     }
 
