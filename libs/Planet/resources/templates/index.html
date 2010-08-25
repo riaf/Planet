@@ -2,26 +2,44 @@
 <html lang="ja">
 <head>
     <meta charset="utf-8" />
-    <title>planet</title>
+    <title><rt:if param="{$pagename}">{$pagename} | </rt:if>{$sitename}</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="alternate" type="application/atom+xml" href="{$t.url('atom')}" />
 </head>
 <body>
-    <h1>planet</h1>
-    <ul>
-        <li><a href="{$t.url()}">home</a></li>
-        <li><a href="{$t.url('add_subscription')}">add</a></li>
-    </ul>
-    <div id="main">
-    <rt:block name="main">
+<div id="wrapper">
+    <h1><rt:if param="{$pagename}">{$pagename} | </rt:if>{$sitename}</h1>
+    <div id="contents">
+        <div id="main">
+        <rt:block name="main">
         <rt:loop param="entries" var="entry">
             <div class="entry">
                 <h3>{$entry.title()}</h3>
                 <div class="description">
                     {$entry.description()}
                 </div>
-                <p class="permalink"><a href="{$entry.link()}">{$entry.link()}</a></p>
+                <p class="permalink"><a href="{$entry.link()}">{$t.trim_width($entry.link(), 50, '..')}</a></p>
             </div>
         </rt:loop>
-    </rt:block>
+            <div class="pager"><rt:pager /></div>
+        </rt:block>
+        </div>
+        <div id="sub">
+            <ul id="nav">
+                <li><a href="{$t.url()}">home</a></li>
+                <li><a href="{$t.url('add_subscription')}">add</a></li>
+                <li><a href="{$t.url('atom')}">feed</a></li>
+            </ul>
+            <h3>Subscriptions</h3>
+            <ul rt:param="subscriptions" rt:var="subscription">
+                <li><a href="{$subscription.link()}">{$subscription.title()}</a> ({$subscription.author()})</li>
+            </ul>
+        </div>
     </div>
+
+    <div id="footer">
+        <address>Planet by <a href="http://riaf.jp">riaf.jp</a></address>
+    </div>
+</div>
 </body>
 </html>
