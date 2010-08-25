@@ -25,7 +25,7 @@ class PlanetEntry extends Dao implements AtomInterface
         $this->created = $this->updated = time();
     }
     protected function __before_save__() {
-        $this->updated = time();
+        // $this->updated = time();
     }
 
     public function atom_id() {

@@ -47,28 +47,28 @@ class Planet extends Flow
         foreach (C(PlanetSubscription)->find_all() as $subscription) {
             Exceptions::clear();
             Log::debug(sprintf('[crawl] feed: %d (%s)', $subscription->id(), $subscription->title()));
-            $feed = $http_feed->do_read($subscription->rss_url());
             try {
+                $feed = $http_feed->do_read($subscription->rss_url());
                 $subscription->title($feed->title());
                 if ($feed->is_link()) $subscription->link(self::_get_link_href($feed->link()));
                 $subscription->rss_url($http_feed->url());
                 $subscription->save(true);
+                foreach ($feed->entry() as $entry) {
+                    Exceptions::clear();
+                    try {
+                        $planet_entry = new PlanetEntry();
+                        $planet_entry->subscription_id($subscription->id());
+                        $planet_entry->title(Tag::cdata($entry->title()));
+                        $planet_entry->description(Text::htmldecode(Tag::cdata($entry->fm_content())));
+                        $planet_entry->link($entry->first_href());
+                        $planet_entry->updated($entry->published());
+                        $planet_entry->save();
+                    } catch (Exception $e) {
+                        Log::warn($e->getMessage());
+                    }
+                }
             } catch (Exception $e) {
                 Log::error($e);
-            }
-            foreach ($feed->entry() as $entry) {
-                Exceptions::clear();
-                try {
-                    $planet_entry = new PlanetEntry();
-                    $planet_entry->subscription_id($subscription->id());
-                    $planet_entry->title($entry->title());
-                    $planet_entry->description(Text::htmldecode(Tag::cdata($entry->fm_content())));
-                    $planet_entry->link($entry->first_href());
-                    $planet_entry->updated($entry->published());
-                    $planet_entry->save();
-                } catch (Exception $e) {
-                    Log::warn($e->getMessage());
-                }
             }
         }
     }
