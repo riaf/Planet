@@ -15,7 +15,7 @@ class PlanetEntry extends Dao implements AtomInterface
     static protected $__id__ = 'type=serial';
     static protected $__subscription_id__ = 'type=integer,require=true';
     static protected $__title__ = 'require=true';
-    static protected $__description__ = 'require=true';
+    static protected $__description__ = 'type=text,require=true';
     static protected $__link__ = 'require=true,unique=true';
     static protected $__created__ = 'type=timestamp';
     static protected $__updated__ = 'type=timestamp';
@@ -23,6 +23,9 @@ class PlanetEntry extends Dao implements AtomInterface
 
     protected function __init__() {
         $this->created = $this->updated = time();
+    }
+    protected function __before_save__() {
+        $this->updated = time();
     }
 
     public function atom_id() {
